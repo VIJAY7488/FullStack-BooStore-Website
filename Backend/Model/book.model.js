@@ -7,7 +7,7 @@ const bookSchema = new mongoose.Schema({
     price : {
         type: "Number"
     },
-    catergory: {
+    category: {
         type: "String"
     },
     title: {

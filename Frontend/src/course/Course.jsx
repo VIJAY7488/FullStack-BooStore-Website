@@ -1,10 +1,26 @@
-import React from 'react'
-import lists from '../lists.json'
+import React, { useEffect, useState } from 'react'
+//import lists from '../lists.json'   now fetching data from datbases
 import Cards from '../components/Cards'
 import {Link} from 'react-router-dom'
+import axios from "axios"
 
 
 function Course() {
+
+  const [book, setbook] = useState([])
+  useEffect(() =>{
+   const getBook = async() =>{
+        try {
+         const res = await axios.get("http://localhost:3000/book");
+         console.log(res.data)
+         setbook(res.data)
+        } catch (error) {
+         console.log(error)
+        }
+   }
+   getBook();
+  }, []);
+
   return (
     <>
       <div className='max-w-screen-2xl container max-auto md:px-20 px-4'>
@@ -23,7 +39,7 @@ function Course() {
         </div>
         <div className='mt-12 grid grid-cols-1 md:grid-cols-3'>
            {
-            lists.map((items) =>(
+            book.map((items) =>(
                 <Cards key={items.id} items={items}/>
             ))
            }
