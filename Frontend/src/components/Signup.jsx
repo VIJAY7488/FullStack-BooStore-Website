@@ -2,6 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import Login from './Login'
 import { useForm } from 'react-hook-form';
+import axios from "axios"
 
 function Signup() {
  
@@ -11,8 +12,25 @@ function Signup() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data); // This line should log the form data
+  const onSubmit = async (data) => {
+     const userInfo = {
+           fullname: data.fullname,
+           email: data.email,
+           password: data.password
+     }
+     await axios.post("http://localhost:3000/user/signup", userInfo)
+          .then((res) => {
+             console.log(res.data)
+             if(res.data){
+              alert("Singup successfully")
+             }
+          })
+          .catch((err) =>{
+             if(err.response.status){
+              console.log(err)
+              alert("Error :" + err.response.data.message)
+             }
+          })
   };
 
   return (
@@ -32,7 +50,7 @@ function Signup() {
             <br/>
         <input type="text" placeholder='Enter your name'
         className='w-80 px-3 py-1 border rounded-md outline-none dark:text-black'
-        {...register("name", { required: true })}/>
+        {...register("fullname", { required: true })}/>
         <br/>
               {errors.email && <span className='text-red-500'>This field is required</span>}
         </div>
@@ -52,7 +70,7 @@ function Signup() {
             className='w-80 px-3 py-1 border rounded-md outline-none dark:text-black' 
             {...register("password", { required: true })}/> 
             <br/>
-              {errors.email && <span className='text-red-500'>This field is required</span>}  
+              {errors.password && <span className='text-red-500'>This field is required</span>}  
         </div>
         <div className='mt-8 flex justify-around items-center'>
             <button className='bg-pink-500 text-white px-4 py-2 rounded-md'>Signup</button>
